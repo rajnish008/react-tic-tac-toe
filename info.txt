@@ -1,0 +1,151 @@
+import { useState } from "react";
+import Child1 from "./Components/Child1";
+import Signup from "./Components/Signup";
+import Login from "./Components/Login";
+export default function App(){
+const [userData,setUserData]=useState({email:"sample", pass:"****"});
+const numList=[12,23,34,45,56,6,7]
+const child1Data=["Apple","Mango"]
+const [isSignup,setSignup]=useState(false)
+const users=[
+  {name:"Rajnish",phone:9090909},
+  {name:"Rohit", phone:2332423},
+{name:"Deena", phone:9090989},
+]
+const hanldeUserData=(event)=>{
+const {name,value}=event.target;
+setUserData({
+  ...userData,
+  [name]:value
+})
+console.log(userData)
+}
+
+const parantFun=(dataFromChild)=>{
+  console.log("Calling from child1"+dataFromChild)
+}
+const handleLogin=()=>{
+setSignup(false)
+}
+const handleSignup=()=>{
+  setSignup(true)
+}
+  return (
+    <>
+      <div className="container">
+      <form>
+  <div className="mb-3">
+    <label htmlFor="exampleInputEmail1" className="form-label">
+      Email address
+    </label>
+    <input
+      type="email"
+      className="form-control"
+      id="exampleInputEmail1"
+      aria-describedby="emailHelp"
+      value={userData.email}
+      name="email"
+      onChange={hanldeUserData}
+    />
+    <div id="emailHelp" className="form-text">
+      We'll never share your email with anyone else.
+    </div>
+  </div>
+  <div className="mb-3">
+    <label htmlFor="exampleInputPassword1" className="form-label">
+      Password
+    </label>
+    <input
+      type="password"
+      className="form-control"
+      id="exampleInputPassword1"
+      value={userData.pass}
+      name="pass"
+      onChange={hanldeUserData}
+    />
+  </div>
+  <div className="mb-3 form-check">
+    <input type="checkbox" className="form-check-input" id="exampleCheck1" />
+    <label className="form-check-label" htmlFor="exampleCheck1">
+      Check me out
+    </label>
+  </div>
+  <button type="submit" className="btn btn-primary">
+    Submit
+  </button>
+</form>
+ 
+ <div className="container">
+  <ul>
+    {numList.map((item,index)=>{
+      return <li key={index}>{item}</li>
+    })}
+  </ul>
+
+  <ul>{users.map((user,index)=>{
+    return <li id={index}>
+      <h3>Name:{user.name}</h3>
+      <h3>Phone:{user.phone}</h3>
+    </li>
+  })}</ul>
+ </div>
+      </div>
+      <Child1 param1={child1Data} param2={{username:"Rajna", phone:909090}} param3={parantFun}/>
+      <button onClick={handleLogin}>Login</button>
+      <button onClick={handleSignup}>Signup</button>
+
+      
+      {isSignup?<Signup></Signup>:<Login></Login>}
+    </>
+  );
+}
+
+
+import Child2 from "./Child2";
+
+export default function Child1({param1, param2,param3}){
+const data=[1,2,3,4,5]
+
+const updateData=(a)=>{
+    param3(data+"  "+a );
+}
+    return (
+        <div className="">
+            <h4>Child component</h4>
+            <h4>Fruits details-</h4>
+            <ul>
+                {param1.map((item)=>{
+                     return <li>{item}</li>
+                })}
+            </ul>
+
+            <ul>
+                {JSON.stringify(param2)}
+            </ul>
+            <button onClick={updateData}>CLICK</button>
+            <Child2 >
+
+            <h3>Heading 3</h3>
+            <p>Paragraph..</p>
+            </Child2>
+        </div>
+    );
+}
+
+import React from 'react'
+
+function Child2(props) {
+const handleChild2=()=>{
+
+}
+    return (
+        
+        <div className="">
+            <h4>Child2 </h4>
+             <button onClick={handleChild2}>CLICK CHILD 2</button>
+             {props.children}
+        </div>
+    )
+}
+
+export default Child2
